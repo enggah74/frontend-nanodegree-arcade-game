@@ -6,7 +6,7 @@
  * A game engine works by drawing the entire game screen over and over, kind of
  * like a flipbook you may have created as a kid. When your player moves across
  * the screen, it may look like just that image/character is moving or being
- * drawn but that is not the case. What's really happening is the entire "scene"
+ * drawn but that is noreset the case. What's really happening is the entire "scene"
  * is being drawn over and over, presenting the illusion of animation.
  *
  * This engine is available globally via the Engine variable and it also makes
@@ -80,7 +80,8 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkEnemyCollisions();
+        checkGemCollision();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -95,6 +96,46 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update();
+        gem.update();
+    }
+
+    // Check if player collides with the enemy
+    // Check if all 3 livs have collided with the enemy.
+    // Reset score and player
+    function checkEnemyCollisions() {
+        for(var enemy = 0; enemy < allEnemies.length;enemy++) {
+            if (player.x < allEnemies[enemy].x + 50  &&
+                player.x + 50 > allEnemies[enemy].x  &&
+                player.y < allEnemies[enemy].y + 50  &&
+                player.y + 50 > allEnemies[enemy].y) {
+                console.log("Collided with the enemy!");
+                player.totalPlayers -=1;
+                if (player.totalPlayers === 0) {
+                    player.totalPlayers = 3;
+                    player.score = 0;
+                    console.log("Game over!");
+                    alert("Game over!");
+                }
+                player.reset();
+                player.addScore();
+            }
+        }
+    }
+
+    // Check if player collided with a gem and increase score
+    function checkGemCollision() {
+        if (player.x < gem.x + 50  &&
+            player.x + 50 > gem.x  &&
+            player.y < gem.y + 50  &&
+            player.y + 50 > gem.y) {
+            console.log("Collided with the gem!");
+            player.score +=10;
+            gem.x = 1000;
+            gem.y = 1000;
+
+            player.addScore();
+            gem = new Gem();
+        }
     }
 
     /* This function initially draws the "game level", it will then call
@@ -135,8 +176,6 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-
-
         renderEntities();
     }
 
@@ -152,7 +191,9 @@ var Engine = (function(global) {
             enemy.render();
         });
 
+        // Draw the player and gem images
         player.render();
+        gem.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -172,7 +213,8 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/Gem Orange.png'
     ]);
     Resources.onReady(init);
 
