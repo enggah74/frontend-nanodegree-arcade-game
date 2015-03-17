@@ -12,7 +12,7 @@ The game allocates 3 lives. Once all lives are used, the player is moved to its 
 
 Instructions to play the game:
 
-1-Click this link (to be provided later). Game starts with bugs crossing the stones from one end to the other randomly, player appearing at the bottom center of the grass area and a gree-colored gem randomly situated across the stones.
+1-Click this link, http://enggah74.github.io/frontend-nanodegree-arcade-game/index.html. Game starts with bugs crossing the stones from one end to the other randomly, player appearing at the bottom center of the grass area and a gree-colored gem randomly situated across the stones.
 
 2-Move the player using the arrow keys to cross the grass and stone-paved areas to reach the water.
 
